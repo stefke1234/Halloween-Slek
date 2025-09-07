@@ -4,14 +4,20 @@
   <meta charset="utf-8" />
   <title>Halloweentocht — De Slek</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  
   <style>
-    html,body,#map { height: 100%; margin:0; padding:0; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
     #map {
-  width: 100%;
-  height: 100vh; /* vult het volledige scherm van het apparaat */ }
-    .leaflet-control-attribution { display: none; } /* optioneel: verberg OSM-tekst */
+      width: 100%;
+      height: 100vh; /* fullscreen */
+    }
   </style>
 </head>
 <body>
@@ -20,38 +26,35 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    // === 1) Vul hier jouw hoekcoördinaten in (lat, lon) ===
-    // Voorbeeld (vervang met jouw coords):
-    var imageBounds = [[51.086242496222255, 5.88201516755503], [51.0892912782123, 5.8862644540066755]];
-    // ================================================
+    // ================================
+    // 1) ImageOverlay met voorbeeld bounds
+    // Vervang deze met jouw SW en NE coördinaten
+    // ================================
+    var imageBounds = [[51.0861, 5.8819], [51.0892, 5.8862]];
 
-    // Midden van de afbeelding berekenen (voor initiële view)
-    var center = [(imageBounds[0][0] + imageBounds[1][0]) / 2,
-                  (imageBounds[0][1] + imageBounds[1][1]) / 2];
-
-    // Maak de kaart (geen basetiles — we tonen alleen jouw afbeelding)
     var map = L.map('map', {
-      center: center,
+      center: [(imageBounds[0][0] + imageBounds[1][0]) / 2,
+               (imageBounds[0][1] + imageBounds[1][1]) / 2],
       zoom: 16,
       minZoom: 14,
       maxZoom: 19,
-      // Hiermee beperk je pannen buiten de afbeelding
       maxBounds: imageBounds
     });
 
-    // Voeg je afbeelding als overlay toe (ImageOverlay). Leaflet positioneert hem op de bounds. 
-    // (Leaflet ImageOverlay informatie: zie Leaflet docs)
     var overlay = L.imageOverlay('slek-kaart.png', imageBounds).addTo(map);
-
-    // Zorg dat de kaart precies op de afbeelding inzoomt
     map.fitBounds(imageBounds);
 
-    // === Voorbeeld markers (huisactiviteiten) ===
-    // Vervang met echte coördinaten van huizen (vind via Google Maps "Wat is hier?")
-    var marker1 = L.marker([51.0505, 5.8324]).addTo(map).bindPopup('<b>Spookhuis</b><br>Familie Janssen 🎃');
-    var marker2 = L.marker([51.0518, 5.8339]).addTo(map).bindPopup('<b>Snoepkraam</b><br>Vrijwilligers');
+    // ================================
+    // 2) Voorbeeld markers
+    // ================================
+    var marker1 = L.marker([51.0505, 5.8324]).addTo(map)
+      .bindPopup('<b>Spookhuis</b><br>Familie Janssen 🎃');
+    var marker2 = L.marker([51.0518, 5.8339]).addTo(map)
+      .bindPopup('<b>Snoepkraam</b><br>Vrijwilligers');
 
-    // === Gebruikerslocatie (live) ===
+    // ================================
+    // 3) Live locatie gebruiker
+    // ================================
     var userMarker = null;
     var userCircle = null;
 
@@ -64,16 +67,15 @@
         userCircle.setLatLng(e.latlng).setRadius(e.accuracy);
       }
     }
+
     function onLocationError(e) {
-      // geef een vriendelijk bericht (geen alarm)
       console.warn("Locatie fout:", e.message);
     }
 
     map.on('locationfound', onLocationFound);
     map.on('locationerror', onLocationError);
 
-    // Start live volgen van locatie: watch=true zorgt dat de marker bijwerkt
-    // setView: false (anders zal de kaart voortdurend naar gebruiker springen)
+    // Live volgen van locatie
     map.locate({watch: true, setView: false, maxZoom: 18});
   </script>
 </body>
