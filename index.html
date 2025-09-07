@@ -32,17 +32,13 @@
     // ================================
     var imageBounds = [[51.0861, 5.8819], [51.0892, 5.8862]];
 
-var map = L.map('map', {
-  crs: L.CRS.Simple,
-  minZoom: -1
-});
-
-var bounds = [[0,0], [1536,1024]]; // hoogte, breedte van afbeelding
-var image = L.imageOverlay('slek-kaart.png', bounds).addTo(map);
-map.fitBounds(bounds);
-
-// Marker op pixel-coördinaten
-var marker = L.marker([500, 400]).addTo(map); // y, x pixels
+    var map = L.map('map', {
+      center: [(imageBounds[0][0] + imageBounds[1][0]) / 2,
+               (imageBounds[0][1] + imageBounds[1][1]) / 2],
+      zoom: 16,
+      minZoom: 14,
+      maxZoom: 19,
+      maxBounds: imageBounds
     });
 
     var overlay = L.imageOverlay('slek-kaart.png', imageBounds).addTo(map);
@@ -84,4 +80,3 @@ var marker = L.marker([500, 400]).addTo(map); // y, x pixels
   </script>
 </body>
 </html>
-
