@@ -31,7 +31,9 @@
     // Vervang deze met jouw SW en NE coördinaten
     // ================================
     var imageBounds = [[51.0861, 5.8819], [51.0892, 5.8862]];
-
+L.imageOverlay('slek-kaart-georef.png', imageBounds).addTo(map);
+map.fitBounds(imageBounds);
+    
     var map = L.map('map', {
       center: [(imageBounds[0][0] + imageBounds[1][0]) / 2,
                (imageBounds[0][1] + imageBounds[1][1]) / 2],
@@ -80,3 +82,4 @@
   </script>
 </body>
 </html>
+
